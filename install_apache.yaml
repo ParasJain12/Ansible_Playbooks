@@ -1,0 +1,48 @@
+---
+- name: Install and Start Apache Web Server (WSL Safe)
+  hosts: localhost
+  become: yes
+  connection: local
+
+  tasks:
+    - name: Ensure package cache is up to date
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Apache
+      apt:
+        name: apache2
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Change Apache to listen on port 8080
+      lineinfile:
+        path: /etc/apache2/ports.conf
+        regexp: '^Listen 80'
+        line: 'Listen 8080'
+
+    - name: Update default virtual host to port 8080
+      lineinfile:
+        path: /etc/apache2/sites-available/000-default.conf
+        regexp: '^<VirtualHost \*:80>'
+        line: '<VirtualHost *:8080>'
+
+    - name: Restart Apache using service command
+      command: service apache2 restart
+
+    - name: Create test index.html
+      copy:
+        dest: /var/www/html/index.html
+        content: "<h1>Hello from Ansible on WSL!</h1>"
+
+    - name: Verify Apache status
+      block:
+        - name: Check Apache status using service command
+          command: service apache2 status
+          register: apache_status
+          ignore_errors: yes
+
+        - name: Show Apache status output
+          debug:
+            msg: "{{ apache_status.stdout }}"
