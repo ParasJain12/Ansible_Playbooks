@@ -1,0 +1,19 @@
+---
+- name: Run a script on remote servers
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Copy script to remote
+      copy:
+        src: /home/paras/scripts/setup.sh
+        dest: /tmp/setup.sh
+        mode: '0755'
+
+    - name: Run the script
+      command: /tmp/setup.sh
+      register: script_output
+
+    - name: Show script output
+      debug:
+        var: script_output.stdout
