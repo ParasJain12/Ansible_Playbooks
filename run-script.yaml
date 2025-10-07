@@ -17,3 +17,20 @@
     - name: Show script output
       debug:
         var: script_output.stdout
+
+
+# To run this we need to create a folder name of scripts and then create a setup.sh file in it
+#!/bin/bash
+#echo "Updating system..."
+#sudo apt update -y
+#echo "Installing nginx..."
+#sudo apt install -y nginx
+#echo "Script completed successfully!"
+
+#after that if we /etc/ansible/hosts, if not create one and paste below content
+#[all]
+#localhost ansible_connection=local
+
+#To run playbook: ansible-playbook run_script.yml --ask-become-pass
+
+
