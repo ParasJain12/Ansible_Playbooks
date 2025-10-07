@@ -1,0 +1,27 @@
+---
+- name: Create a cron job using Ansible
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure a script exists to run
+      copy:
+        src: /home/paras/scripts/backup.sh
+        dest: /usr/local/bin/backup.sh
+        mode: '0755'
+
+    - name: Create a cron job to run the script every day at 3:30 AM
+      cron:
+        name: "Daily Backup Job"
+        minute: "30"
+        hour: "3"
+        user: root
+        job: "/usr/local/bin/backup.sh >> /var/log/backup.log 2>&1"
+
+
+# This is cron playbook that is successfully tested
+# To run this we need to create backup.sh file and paste the below content
+#!/bin/bash
+#echo "Backup started at $(date)" >> /var/log/backup.log
+#tar -czf /tmp/mybackup_$(date +%F).tar.gz /etc
+#echo "Backup completed at $(date)" >> /var/log/backup.log
