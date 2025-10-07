@@ -1,0 +1,13 @@
+---
+- name: Copying file to remote 
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Copy files
+    copy:
+      src: /root/myfile.txt
+      dest: /tmp/ #Give full path, it not always clear
+      owner: paras
+      group: paras
+      mode: ugo=rw #0664
