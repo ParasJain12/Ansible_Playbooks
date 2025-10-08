@@ -1,0 +1,23 @@
+---
+- name: Enable firewall and open port 8080 using firewalld
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Ensure firewalld is installed
+      yum:
+        name: firewalld
+        state: present
+
+    - name: Start and enable firewalld
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
+    - name: Open port 8080 permanently
+      firewalld:
+        port: 8080/tcp
+        permanent: yes
+        state: enabled
+        immediate: yes
