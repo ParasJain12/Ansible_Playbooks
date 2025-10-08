@@ -11,5 +11,8 @@
         shell: /bin/bash
         create_home: yes
 
+# To delete the user: we use state: absent
+# to remove user data and directory: remove: yes
+
 
 # To verify that user is created or not: ansible all -m shell -a "id parasjain"
